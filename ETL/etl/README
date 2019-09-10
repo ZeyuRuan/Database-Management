@@ -1,10 +1,10 @@
 README
 
-BannerID: B01561238  
+BannerID: B01531482  
 
 	The import application is hard for me and I don't have enough time to finish it.Luckily, I finished the query application. The basic functions are all satisfied. Maybe my SQL is not efficient enough so the run time may be a bit long, but I think it won't take more than 30s to run a certain query. 
 	As to query 9 to 11, my SQL language may not seem very beautiful because of many 'with' clauses and many argument settings. Fortunately, it is easy to understand, check and correct them. Enjoy them. lol.
 
-SHIXIN LIU
+Zeyu Ruan
 
 
