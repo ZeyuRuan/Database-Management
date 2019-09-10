@@ -1,0 +1,18 @@
+SHIXIN LIU	B01561238
+
+1.
+The cost of block nested loop join is much less than that of the nested loop join.
+By using join buffer, BNL stores multiple tuples of outer join realtion before comparation. And NLJ has to access the inner join block every time it access a tuple in the outer join block. Therefore, the times of accessing inner join block are significantly saved thus reducing the cost much.
+
+2.
+failed.
+But I think the farther the select node is from root of the querry tree, the cost of querry will be reduced more. It's better to do select before join.
+
+3.
+Example: Indexed nested inner join
+Assume A is the attribute that the R and S have in common. For every tuple in R, we use the the value of R.A to search corresponding attributes of S.(select attribute=R.A from S)
+
+B-tree is better than B+tree in this situation.
+In this method, we need to search S.A that equals to R.A. Since B+tree does better in range querry and B-tree does better in qualification querry, B-tree is better. 
+
+

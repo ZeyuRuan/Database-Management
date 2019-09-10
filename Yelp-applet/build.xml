@@ -1,0 +1,45 @@
+<project name="yelp" default="run" basedir=".">
+
+	<property name="lib" location="${basedir}/lib" />
+	<property name="src" location="${basedir}/src" />
+	<property name="bin" location="${basedir}/bin" />
+
+	<property name="main.class" value="yelp.App" />
+	<property name="test.class" value="yelp.Tester" />
+
+	<path id="all-path">
+		<pathelement path="${src}" />	
+		<pathelement path="${bin}" />
+		<fileset dir="${lib}">
+			<include name="*.jar" />
+		</fileset>
+		<pathelement location="lib/junit.jar"/>
+		<pathelement location="lib/sqlite-jdbc-3.7.6.3-20110609.081603-3.jar"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${bin}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}" target="1.8" destdir="${bin}" includeantruntime="false" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="all-path" />
+		</javac>
+	</target>
+
+	<target name="run" depends="compile">
+		<java fork="true" classname="${main.class}">
+			<classpath refid="all-path" />
+		</java>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit>
+			<classpath refid="all-path" />
+			<formatter type="plain" usefile="false" />
+			<test name="${test.class}" />
+		</junit>
+	</target>
+
+</project>

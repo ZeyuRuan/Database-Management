@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="simpledb2.10">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/bin" />
+	<property name="source.dir" location="src" />
+	<property name="libraries.dir" location="lib" />
+    <property name="dbdir" value="YelpSimpleDB" />
+	
+    <path id="project.classpath">
+    		<pathelement location="${build.classes.dir}" />
+		<fileset dir="${libraries.dir}">
+			<include name="*.jar" />
+		</fileset>
+    </path>      
+	
+	<target name="compile" depends="prepare">
+		<javac srcdir="${source.dir}" destdir="${build.classes.dir}" includeantruntime="false" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+	
+	<target name="prepare">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+	
+
+    <target depends="clean" name="cleanall"/>
+	
+    <target name="build" depends="compile"/>
+	
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    
+	<target name="server" depends="compile">
+        <java classname="simpledb.server.Startup" failonerror="true" fork="yes">
+            <arg line="${dbdir}"/>
+            <arg line="-Xmx4g" />
+            <classpath refid="project.classpath"/>
+        </java>
+    </target>
+   
+	<target name="sql" depends="compile">
+        <java classname="simpledb.clients.SQLInterpreter" failonerror="true" fork="yes">
+            <arg line="-Xmx4g" />
+            <classpath refid="project.classpath"/>
+        </java>
+    </target>
+    
+	<target name="createYelpDB" depends="compile">		
+        <java classname="simpledb.clients.CreateYelpDB" failonerror="true" fork="yes">
+            <arg line="-Xmx4g" />
+            <classpath refid="project.classpath"/>
+        </java>
+    </target>
+	
+	<target name="createStudentDB" depends="compile">		
+        <java classname="simpledb.clients.CreateStudentDB" failonerror="true" fork="yes">
+            <arg line="-Xmx4g" />
+            <classpath refid="project.classpath"/>
+        </java>
+    </target>
+	
+	<target name="test" depends="compile">
+        <java classname="simpledb.clients.StudentTester" failonerror="true" fork="yes">
+            <arg line="-Xmx4g" />
+            <classpath refid="project.classpath" />
+        </java>
+    </target>
+
+    <target name="removeDB">
+        <delete verbose="true" >
+            <fileset dir="~/${dbdir}"/>
+        </delete>
+    </target>
+</project>

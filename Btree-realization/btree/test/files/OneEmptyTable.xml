@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8"?><Database><Table Name="TestFoods"><Schema><Field Index="PRIMARY" Name="id" Type="DOUBLE"/><Field Name="name" Type="STRING"/><Field Name="calories" Type="DOUBLE"/></Schema><Data></Data></Table></Database>

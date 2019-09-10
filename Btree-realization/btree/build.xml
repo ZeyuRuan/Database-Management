@@ -1,0 +1,139 @@
+<project name="bdsim" default="run-server" basedir=".">
+
+	<property name="src" location="${basedir}/src" />
+	<property name="test" location="${basedir}/test" />
+	<property name="bin" location="${basedir}/bin" />
+	<property name="doc" location="${basedir}/doc" />
+	<property name="lib" location="${basedir}/lib" />
+	<property name="www" location="/pro/web/web/people/wpijewsk/bdsim" />
+	<property name="ta-test" location="/course/cs127/asgn/new_asgn/projects/btree/ta-test" />
+	
+	<property name="log4j" location="${lib}/log4j-1.2.14.jar" />	
+
+	<property name="server.class" value="bdsim.server.main.BDSimulator" />
+	<property name="client.class" value="bdsim.client.BDClient" />
+	<property name="test.class" value="bdsim.server.system.index.BDBPlusTreeIndexTATest" />
+	<property name="student-test.class" value="bdsim.server.system.index.BDBPlusTreeIndexStudentTest" />
+	
+	<property name="file" value="test/files/OneEmptyTable.xml" />
+
+	<path id="all-path">
+		<pathelement path="${src}" />	
+		<pathelement path="${test}" />	
+
+		<pathelement path="${bin}" />
+			
+		<pathelement path="${log4j}" />		
+		<pathelement path="${jogl}" />			
+	</path>
+
+	<target name="javadoc-web">
+		<javadoc access="private" packagenames="bdsim.*" sourcepath="src" destdir="${www}/doc" author="true" version="true" use="true">
+			<classpath refid="all-path" />
+		</javadoc>
+		<exec dir="${www}" executable="webupdate" />
+	</target> 	
+	
+	<target name="clean-web">
+		<delete dir="${www}/doc" />
+		<exec dir="${www}" executable="webupdate" />
+	</target> 	
+	
+	<target name="javadoc">
+		<javadoc access="private" packagenames="bdsim.*" sourcepath="src" destdir="${doc}" author="true" version="true" use="true">
+			<classpath refid="all-path" />
+		</javadoc>
+	</target> 	
+
+	<path id="classpath.test">
+		<pathelement location="/course/cs127/lib/junit.jar" />
+		<path refid="all-path" />
+	</path>
+	
+	<target name="clean">
+		<delete dir="${bin}" />
+		<delete dir="${doc}" />
+	</target>
+
+	<target name="clean-doc">
+		<delete dir="${doc}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${basedir}/src" destdir="${basedir}/bin" includeantruntime="false" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="all-path" />
+		</javac>
+	</target>
+
+	<target name="compile-student-test">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}:${test}" destdir="${bin}" includeantruntime="false" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="classpath.test" />
+		</javac>
+	</target>
+	
+	<target name="compile-ta-test">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src}:${test}:${ta-test}" destdir="${bin}" includeantruntime="false" debug="true" debuglevel="lines,vars,source">
+			<classpath refid="classpath.test" />
+		</javac>
+	</target>
+
+	<target name="run-client" depends="compile">
+		<java fork="true" classname="${client.class}">
+			<classpath refid="all-path" />
+		</java>
+	</target>
+
+  <target name="run" depends="compile">
+    <java fork="true" classname="${server.class}">
+      <classpath refid="all-path" />
+      <arg value="${file}"/>
+    </java>
+  </target>
+
+	<target name="run-server" depends="compile">
+		<java fork="true" classname="${server.class}">
+			<classpath refid="all-path" />
+                        <sysproperty key="pavlo.testFile" value="${pavlo.testFile}"/>
+                        <sysproperty key="pavlo.checkTree" value="${pavlo.checkTree}"/>
+                        <sysproperty key="pavlo.outputDiskOperations" value="${pavlo.outputDiskOperations}"/>
+		</java>
+	</target>
+    
+    <target name="run-server-plain" depends="compile">
+		<java fork="true" classname="${server.class}">
+			<classpath refid="all-path" />
+                       
+		</java>
+	</target>
+	
+	<target name="test-btree" depends="compile">
+		<java fork="true" classname="bdsim.server.system.index.BDTATester">
+			<classpath refid="all-path" />
+		</java>
+	</target>	
+	
+	<target name="student-test" depends="compile-student-test">
+		<junit>
+			<classpath refid="classpath.test" />
+			<formatter type="plain" usefile="false" />
+			<test name="${student-test.class}" />
+		</junit>
+	</target>
+		
+	<target name="test" depends="compile-ta-test">
+		<junit>
+			<classpath refid="classpath.test" />
+			<formatter type="plain" usefile="false" />
+			<test name="${test.class}" />
+		</junit>
+	</target>	
+		
+	<target name="run-log" depends="compile">
+		<java fork="true" classname="bdsim.server.system.log.BDLogTester">
+			<classpath refid="all-path" />
+		</java>
+	</target>	
+</project>

@@ -1,0 +1,16 @@
+// General properties
+network.port=1877
+network.backlog=200
+network.numthreads=10
+scheduler.numthreads=12
+
+// B+ tree properties
+bplustree.d=4
+
+// Visualizer properties
+visualizer.doShow=true
+
+// Concurrency properties
+controller.delay=3000
+controller.className=TwoPhaseLockController
+//controller.className=TimeStampController
